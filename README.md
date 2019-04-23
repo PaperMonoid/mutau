@@ -1,2 +1,2 @@
-# mutau
-A typescript genetic algorithm library.
+# μτ
+A typescript multi-objective genetic algorithm library.

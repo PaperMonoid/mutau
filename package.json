@@ -1,0 +1,31 @@
+{
+  "name": "mutau",
+  "version": "1.0.0",
+  "description": "A typescript multi-objective genetic algorithm library.",
+  "main": "src/index.ts",
+  "scripts": {
+    "test": "mocha -r ts-node/register __tests__/**/*.test.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PaperMonoid/mutau.git"
+  },
+  "keywords": ["genetic-algorithm", "optimization", "multi-objective"],
+  "author": "PaperMonoid",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/PaperMonoid/mutau/issues"
+  },
+  "homepage": "https://github.com/PaperMonoid/mutau#readme",
+  "dependencies": {
+    "pareto-structs": "github:papermonoid/pareto-structs#v2.0"
+  },
+  "devDependencies": {
+    "@types/chai": "^4.1.7",
+    "@types/mocha": "^5.2.6",
+    "chai": "^4.2.0",
+    "mocha": "^6.1.4",
+    "ts-node": "^8.1.0",
+    "typescript": "^3.4.4"
+  }
+}
