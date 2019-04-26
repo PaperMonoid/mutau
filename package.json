@@ -22,8 +22,9 @@
   },
   "homepage": "https://github.com/PaperMonoid/mutau#readme",
   "dependencies": {
+    "@types/seedrandom": "^2.4.28",
     "pareto-structs": "github:papermonoid/pareto-structs",
-    "random": "^2.1.1"
+    "seedrandom": "^3.0.1"
   },
   "devDependencies": {
     "@types/chai": "^4.1.7",

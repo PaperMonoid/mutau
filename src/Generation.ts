@@ -16,18 +16,9 @@ export default class Generation<T> {
   search(): Generation<T> {
     const algorithm = this.algorithm;
     let population = this.population;
-    population = algorithm.getBreeder().breed(population);
-    population = algorithm.getMutator().mutate(population);
-    population = algorithm.getKiller().kill(population);
-    return new Generation<T>(this.algorithm, population);
-  }
-
-  biasedSearch(biases: number[]): Generation<T> {
-    const algorithm = this.algorithm.biased(biases);
-    let population = this.population;
-    population = algorithm.getBreeder().breed(population);
-    population = algorithm.getMutator().mutate(population);
-    population = algorithm.getKiller().kill(population);
+    population = algorithm.breeder.breed(population);
+    population = algorithm.mutator.mutate(population);
+    population = algorithm.killer.kill(population);
     return new Generation<T>(this.algorithm, population);
   }
 }

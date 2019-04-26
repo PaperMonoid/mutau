@@ -1,5 +1,5 @@
 import { ParetoStruct } from "pareto-structs";
 
-export default interface Killer<T> {
+export default interface IKiller<T> {
   kill(population: ParetoStruct<number, T>): ParetoStruct<number, T>;
 }
