@@ -1,5 +1,5 @@
-import Random from "./Random";
 import ISelector from "./ISelector";
+import Random from "./Random";
 import { ParetoStruct } from "pareto-structs";
 
 export default class UniformSelector<T> implements ISelector<T> {

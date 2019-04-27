@@ -4,17 +4,15 @@
   "description": "A typescript multi-objective genetic algorithm library.",
   "main": "src/index.ts",
   "scripts": {
+    "start": "node dist/index.js",
+    "build": "tsc",
     "test": "mocha -r ts-node/register __tests__/**/*.test.ts"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/PaperMonoid/mutau.git"
   },
-  "keywords": [
-    "genetic-algorithm",
-    "optimization",
-    "multi-objective"
-  ],
+  "keywords": ["genetic-algorithm", "optimization", "multi-objective"],
   "author": "PaperMonoid",
   "license": "MIT",
   "bugs": {

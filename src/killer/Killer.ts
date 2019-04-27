@@ -1,7 +1,7 @@
-import { ParetoStruct, Frontier } from "pareto-structs";
 import IKiller from "./IKiller";
+import { MultiMap, ParetoStruct, Frontier } from "pareto-structs";
 
-class WorstIterator<T> extends Iterable<[number[], T]> {
+class WorstIterator<T> implements Iterable<[number[], T]> {
   dimentions: MultiMap<number[], T>[];
 
   constructor(dimentions: MultiMap<number[], T>[]) {
@@ -9,20 +9,23 @@ class WorstIterator<T> extends Iterable<[number[], T]> {
   }
 
   [Symbol.iterator](): Iterator<[number[], T]> {
-    function* iterator() {
-      while (true) {
-        for (let i = 0; i < this.dimentions.length; i++) {
-          if (!this.dimentions[i].isEmpty()) {
-            yield this.dimentions[i].head();
+    function* iterator(self: WorstIterator<T>) {
+      let allEmpty = false;
+      while (!allEmpty) {
+        allEmpty = true;
+        for (let i = 0; i < self.dimentions.length; i++) {
+          if (!self.dimentions[i].isEmpty()) {
+            allEmpty = false;
+            yield self.dimentions[i].head();
           }
         }
       }
     }
-    return iterator().bind(this);
+    return iterator(this);
   }
 }
 
-export default class Killer<T> extends IKiller<T> {
+export default class Killer<T> implements IKiller<T> {
   readonly limit: number;
 
   constructor(limit: number) {
@@ -31,17 +34,14 @@ export default class Killer<T> extends IKiller<T> {
 
   kill(population: ParetoStruct<number, T>): ParetoStruct<number, T> {
     let count = 0;
-    let population = this.population;
     while (count < this.limit && !population.frontiers.isEmpty()) {
       let [keys, frontier] = population.frontiers.head();
       const samples = new WorstIterator<T>(frontier.dimentions);
       for (let worst of samples) {
         if (count < this.limit) {
-          population = population.remove(
-            dimention.value.keys,
-            dimention.value.value
-          );
-          samples.dimentions = population.dimentions;
+          population = population.remove(worst[0], worst[1]);
+          [keys, frontier] = population.frontiers.head();
+          samples.dimentions = frontier.dimentions;
           count++;
         } else {
           break;

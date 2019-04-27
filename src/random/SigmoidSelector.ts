@@ -1,8 +1,8 @@
-import Random from "./Random";
 import ISelector from "./ISelector";
+import Random from "./Random";
 import { ParetoStruct } from "pareto-structs";
 
-function* sigmoid(random: Random): number {
+function* sigmoid(random: Random) {
   while (true) {
     let [x] = random;
     yield 0.5 + 0.5 * Math.tanh(5 * (x - 0.5));
