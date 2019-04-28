@@ -47,9 +47,11 @@ export default class Killer<T> implements IKiller<T> {
           break;
         }
       }
-      if (count < this.limit) {
-        population = population.removeAll(keys);
-        count++;
+      for (let sample of frontier.optimals) {
+        if (count < this.limit) {
+          population = population.remove(sample[0], sample[1]);
+          count++;
+        }
       }
     }
     return population;

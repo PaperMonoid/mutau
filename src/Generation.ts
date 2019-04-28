@@ -26,19 +26,13 @@ export default class Generation<T> {
 
   search(): Generation<T> {
     let population = this.population;
-    console.log(`POPULATION SIZE: ${this.populationSize(population)}`);
+    console.log(`POPULATION SIZE: ${population.size()}`);
     population = this.breeder.breed(population);
-    console.log(
-      `POPULATION SIZE AFTER BREED: ${this.populationSize(population)}`
-    );
+    console.log(`POPULATION SIZE AFTER BREED: ${population.size()}`);
     population = this.mutator.mutate(population);
-    console.log(
-      `POPULATION SIZE AFTER MUTATE: ${this.populationSize(population)}`
-    );
+    console.log(`POPULATION SIZE AFTER MUTATE: ${population.size()}`);
     population = this.killer.kill(population);
-    console.log(
-      `POPULATION SIZE AFTER KILL: ${this.populationSize(population)}`
-    );
+    console.log(`POPULATION SIZE AFTER KILL: ${population.size()}`);
     return new Generation<T>(
       this.breeder,
       this.mutator,
@@ -46,16 +40,5 @@ export default class Generation<T> {
       population,
       this.count + 1
     );
-  }
-
-  private populationSize(population: ParetoStruct<number, T>) {
-    let size = 0;
-    for (let [__, frontier] of population.frontiers) {
-      size += 1;
-      for (let dimention of frontier.dimentions) {
-        size += dimention.size();
-      }
-    }
-    return size;
   }
 }

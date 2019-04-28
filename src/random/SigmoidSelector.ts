@@ -21,22 +21,18 @@ export default class SigmoidSelector<T> implements ISelector<T> {
       let [x] = sigmoid(this.random);
       let i = Math.floor(x * (population.frontiers.size() - 1));
       let [keys, frontier] = population.frontiers.nth(i);
-      let nonEmptyDimentions = [];
+      let nonEmptyDimentions = [frontier.optimals];
       for (let dimention of frontier.dimentions) {
         if (!dimention.isEmpty()) {
           nonEmptyDimentions.push(dimention);
         }
       }
-      if (nonEmptyDimentions.length == 0) {
-        return [keys, frontier.optimal];
-      } else {
-        [x] = this.random;
-        i = Math.floor(x * (nonEmptyDimentions.length - 1));
-        let dimention = nonEmptyDimentions[i];
-        [x] = this.random;
-        i = Math.floor(x * (dimention.size() - 1));
-        return dimention.nth(i);
-      }
+      [x] = this.random;
+      i = Math.floor(x * (nonEmptyDimentions.length - 1));
+      let dimention = nonEmptyDimentions[i];
+      [x] = sigmoid(this.random);
+      i = Math.floor(x * (dimention.size() - 1));
+      return dimention.nth(i);
     }
   }
 }

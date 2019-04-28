@@ -9,7 +9,7 @@ function minimize(first: number, second: number): number {
 }
 
 function fitness(x: number[]): number[] {
-  return [x[0], Math.abs(3.1416 - x[1])];
+  return [x[0], Math.abs(Math.PI - x[1])];
 }
 
 function crossover(first: number[], second: number[]): number[] {
@@ -17,11 +17,10 @@ function crossover(first: number[], second: number[]): number[] {
 }
 
 function mutate(samples: number[]): number[] {
-  if (Math.random() > 0.5) {
-    return samples.map(sample => sample - Math.random() * 3);
-  } else {
-    return samples.map(sample => sample + Math.random() * 3);
-  }
+  return samples.map(
+    sample =>
+      sample + (Math.random() > 0.5 ? 1 : -1) * 3 * Math.random() * sample
+  );
 }
 
 function eq(first: number[], second: number[]) {
@@ -54,13 +53,13 @@ for (let i = 0; i < 100; i++) {
 let generation = algorithm.optimize(initial);
 
 let [keys, frontier] = generation.population.frontiers.last();
-let optimal = frontier.optimal;
+let optimals = frontier.optimals.values();
 
 console.log("OPTIMIZING...");
-console.log(`1:\tFITNESS ${keys}\tOPTIMAL ${optimal}`);
-for (let i = 2; i <= 100; i++) {
+console.log(`1:\tFITNESS ${keys}\tOPTIMALS ${optimals}`);
+for (let i = 2; i <= 100000; i++) {
   generation = generation.search();
   [keys, frontier] = generation.population.frontiers.last();
-  optimal = frontier.optimal;
-  console.log(`${i}:\tFITNESS ${keys}\tOPTIMAL ${optimal}`);
+  optimals = frontier.optimals.values();
+  console.log(`${i}:\tFITNESS ${keys}\tOPTIMAL ${optimals}`);
 }
