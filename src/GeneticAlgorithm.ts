@@ -5,6 +5,7 @@ import { Mutator } from "./mutator";
 import {
   BiFunction,
   Comparator,
+  Equals,
   Function,
   ParetoStruct,
   Frontier
@@ -14,6 +15,7 @@ import { Random, SigmoidSelector, UniformSelector } from "./random";
 export default class GeneticAlgorithm<T> {
   readonly seed: string;
   readonly objectives: Comparator<number>[];
+  readonly equals: Equals<T>;
   readonly fitness: Function<T, number[]>;
   readonly crossover: BiFunction<T, T, T>;
   readonly mutate: Function<T, T>;
@@ -24,6 +26,7 @@ export default class GeneticAlgorithm<T> {
   constructor(
     seed: string,
     objectives: Comparator<number>[],
+    equals: Equals<T>,
     fitness: Function<T, number[]>,
     crossover: BiFunction<T, T, T>,
     mutate: Function<T, T>,
@@ -33,6 +36,7 @@ export default class GeneticAlgorithm<T> {
   ) {
     this.seed = seed;
     this.objectives = objectives;
+    this.equals = equals;
     this.fitness = fitness;
     this.crossover = crossover;
     this.mutate = mutate;
@@ -42,7 +46,7 @@ export default class GeneticAlgorithm<T> {
   }
 
   optimize(population: Iterable<T>): Generation<T> {
-    let pareto = new ParetoStruct<number, T>(this.objectives);
+    let pareto = new ParetoStruct<number, T>(this.objectives, this.equals);
     for (let sample of population) {
       pareto = pareto.put(this.fitness(sample), sample);
     }

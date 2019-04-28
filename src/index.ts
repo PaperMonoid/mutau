@@ -9,7 +9,7 @@ function minimize(first: number, second: number): number {
 }
 
 function fitness(x: number[]): number[] {
-  return [x[0] * x[0], 4 * x[1]];
+  return [x[0], Math.abs(3.1416 - x[1])];
 }
 
 function crossover(first: number[], second: number[]): number[] {
@@ -18,15 +18,26 @@ function crossover(first: number[], second: number[]): number[] {
 
 function mutate(samples: number[]): number[] {
   if (Math.random() > 0.5) {
-    return samples.map(sample => sample - Math.random());
+    return samples.map(sample => sample - Math.random() * 3);
   } else {
-    return samples.map(sample => sample + Math.random());
+    return samples.map(sample => sample + Math.random() * 3);
   }
+}
+
+function eq(first: number[], second: number[]) {
+  const size = Math.min(first.length, second.length);
+  for (let i = 0; i < size; i++) {
+    if (first[i] != second[i]) {
+      return false;
+    }
+  }
+  return true;
 }
 
 const algorithm = new GeneticAlgorithm<number[]>(
   "foo",
   [maximize, minimize],
+  eq,
   fitness,
   crossover,
   mutate,
@@ -45,11 +56,11 @@ let generation = algorithm.optimize(initial);
 let [keys, frontier] = generation.population.frontiers.last();
 let optimal = frontier.optimal;
 
-console.log(`GENERATION 1 FITNESS ${keys} OPTIMAL ${optimal}`);
 console.log("OPTIMIZING...");
-for (let i = 2; i <= 10; i++) {
+console.log(`1:\tFITNESS ${keys}\tOPTIMAL ${optimal}`);
+for (let i = 2; i <= 100; i++) {
   generation = generation.search();
   [keys, frontier] = generation.population.frontiers.last();
   optimal = frontier.optimal;
-  console.log(`GENERATION ${i} FITNESS ${keys} OPTIMAL ${optimal}`);
+  console.log(`${i}:\tFITNESS ${keys}\tOPTIMAL ${optimal}`);
 }

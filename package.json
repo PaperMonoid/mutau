@@ -12,7 +12,11 @@
     "type": "git",
     "url": "git+https://github.com/PaperMonoid/mutau.git"
   },
-  "keywords": ["genetic-algorithm", "optimization", "multi-objective"],
+  "keywords": [
+    "genetic-algorithm",
+    "optimization",
+    "multi-objective"
+  ],
   "author": "PaperMonoid",
   "license": "MIT",
   "bugs": {
