@@ -10,61 +10,49 @@ import {
   ParetoStruct,
   Frontier
 } from "pareto-structs";
+import { IEvolution } from "./evolution";
 import { Random, SigmoidSelector, UniformSelector } from "./random";
 
 export default class GeneticAlgorithm<T> {
-  readonly seed: string;
+  readonly evolution: IEvolution<T>;
   readonly objectives: Comparator<number>[];
   readonly equals: Equals<T>;
-  readonly fitness: Function<T, number[]>;
-  readonly crossover: BiFunction<T, T, T>;
-  readonly mutate: Function<T, T>;
-  readonly breedLimit: number;
-  readonly mutationLimit: number;
-  readonly killLimit: number;
 
   constructor(
-    seed: string,
+    evolution: IEvolution<T>,
     objectives: Comparator<number>[],
-    equals: Equals<T>,
-    fitness: Function<T, number[]>,
-    crossover: BiFunction<T, T, T>,
-    mutate: Function<T, T>,
+    equals: Equals<T>
+  ) {
+    this.evolution = evolution;
+    this.objectives = objectives;
+    this.equals = equals;
+  }
+
+  optimize(
+    population: Iterable<T>,
     breedLimit: number,
     mutationLimit: number,
     killLimit: number
-  ) {
-    this.seed = seed;
-    this.objectives = objectives;
-    this.equals = equals;
-    this.fitness = fitness;
-    this.crossover = crossover;
-    this.mutate = mutate;
-    this.breedLimit = breedLimit;
-    this.mutationLimit = mutationLimit;
-    this.killLimit = killLimit;
-  }
-
-  optimize(population: Iterable<T>): Generation<T> {
+  ): Generation<T> {
+    const evolution = this.evolution.setRandom(
+      this.evolution.getRandom().copy()
+    );
     let pareto = new ParetoStruct<number, T>(this.objectives, this.equals);
     for (let sample of population) {
-      pareto = pareto.put(this.fitness(sample), sample);
+      pareto = pareto.put(evolution.fitness(sample), sample);
     }
-    const random = new Random(this.seed);
     return new Generation<T>(
       new Breeder<T>(
-        this.breedLimit,
-        new SigmoidSelector(random),
-        this.crossover,
-        this.fitness
+        breedLimit,
+        new SigmoidSelector(evolution.getRandom()),
+        evolution
       ),
       new Mutator<T>(
-        this.mutationLimit,
-        new UniformSelector(random),
-        this.mutate,
-        this.fitness
+        mutationLimit,
+        new UniformSelector(evolution.getRandom()),
+        evolution
       ),
-      new Killer<T>(this.killLimit),
+      new Killer<T>(killLimit),
       pareto
     );
   }

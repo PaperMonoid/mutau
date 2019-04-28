@@ -1,23 +1,17 @@
 import IBreeder from "./IBreeder";
+import { IEvolution } from "../evolution";
 import { ISelector } from "../random";
 import { BiFunction, Function, ParetoStruct } from "pareto-structs";
 
 export default class Breeder<T> implements IBreeder<T> {
   readonly limit: number;
   readonly selector: ISelector<T>;
-  readonly crossover: BiFunction<T, T, T>;
-  readonly fitness: Function<T, number[]>;
+  readonly evolution: IEvolution<T>;
 
-  constructor(
-    limit: number,
-    selector: ISelector<T>,
-    crossover: BiFunction<T, T, T>,
-    fitness: Function<T, number[]>
-  ) {
+  constructor(limit: number, selector: ISelector<T>, evolution: IEvolution<T>) {
     this.limit = limit;
     this.selector = selector;
-    this.crossover = crossover;
-    this.fitness = fitness;
+    this.evolution = evolution;
   }
 
   breed(population: ParetoStruct<number, T>): ParetoStruct<number, T> {
@@ -25,8 +19,8 @@ export default class Breeder<T> implements IBreeder<T> {
     while (count < this.limit && !population.frontiers.isEmpty()) {
       const [_, first] = this.selector.select(population);
       const [__, second] = this.selector.select(population);
-      const offspring = this.crossover(first, second);
-      population = population.put(this.fitness(offspring), offspring);
+      const offspring = this.evolution.crossover(first, second);
+      population = population.put(this.evolution.fitness(offspring), offspring);
       count++;
     }
     return population;
