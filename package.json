@@ -4,6 +4,7 @@
   "description": "A typescript multi-objective genetic algorithm library.",
   "main": "src/index.ts",
   "scripts": {
+    "build-dependencies": "cd node_modules/pareto-structs && npm run build && cd ../../",
     "start": "node dist/index.js",
     "build": "tsc",
     "test": "mocha -r ts-node/register __tests__/**/*.test.ts"

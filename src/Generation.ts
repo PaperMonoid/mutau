@@ -26,13 +26,9 @@ export default class Generation<T> {
 
   search(): Generation<T> {
     let population = this.population;
-    console.log(`POPULATION SIZE: ${population.size()}`);
     population = this.breeder.breed(population);
-    console.log(`POPULATION SIZE AFTER BREED: ${population.size()}`);
     population = this.mutator.mutate(population);
-    console.log(`POPULATION SIZE AFTER MUTATE: ${population.size()}`);
     population = this.killer.kill(population);
-    console.log(`POPULATION SIZE AFTER KILL: ${population.size()}`);
     return new Generation<T>(
       this.breeder,
       this.mutator,
