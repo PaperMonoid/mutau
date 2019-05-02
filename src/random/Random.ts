@@ -1,4 +1,4 @@
-import seedrandom from "seedrandom";
+import * as seedrandom from "seedrandom";
 
 export default class Random implements Iterable<number> {
   readonly rng: seedrandom.prng;
@@ -8,7 +8,7 @@ export default class Random implements Iterable<number> {
   }
 
   [Symbol.iterator](): Iterator<number> {
-    function* iterator(rng) {
+    function* iterator(rng: seedrandom.prng) {
       while (true) {
         yield rng.quick();
       }
